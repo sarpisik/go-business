@@ -1,0 +1,18 @@
+<div>
+    <h1>By {{fullName author}}</h1>
+    <div>{{body}}</div>
+
+    <h1>Comments</h1>
+
+    {{#each comments}}
+    <h2>By {{fullName author}}</h2>
+    <div>{{body}}</div>
+    {{/each}}
+
+    <!-- <h1>Struct example</h1>
+  {{#with myStruct}}
+  {{ this }}
+  OR
+  {{ FieldMame }}
+  {{/with}} -->
+</div>
