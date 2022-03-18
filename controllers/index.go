@@ -6,11 +6,10 @@ import (
 )
 
 func Index() func(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("views/index.html")
+
 	return func(w http.ResponseWriter, r *http.Request) {
-		tmpl, err := template.ParseFiles("views/index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		} else if tmpl == nil {
+		if tmpl == nil {
 			http.Error(w, "Failed to parse html file.", http.StatusInternalServerError)
 		}
 
