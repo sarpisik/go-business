@@ -1,17 +1,26 @@
 package controllers
 
 import (
+	"html/template"
 	"net/http"
 )
 
-type indexResponse struct {
-	Message string `json:"message"`
-}
-
 func Index() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		iR := indexResponse{Message: "Hello world!"}
+		tmpl, err := template.ParseFiles("views/index.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		} else if tmpl == nil {
+			http.Error(w, "Failed to parse html file.", http.StatusInternalServerError)
+		}
 
-		respondWithJSON(w, http.StatusOK, iR)
+		tmplData := map[string]interface{}{
+			"title": "Index Page",
+		}
+
+		tmplErr := tmpl.Execute(w, tmplData)
+		if tmplErr != nil {
+			http.Error(w, tmplErr.Error(), http.StatusInternalServerError)
+		}
 	}
 }
