@@ -1,0 +1,27 @@
+<title>{{.title}}</title>
+
+{{if .errorType}}
+  <p>{{.message}}</p>
+{{end}}
+
+{{if .successMessage}}
+  <p>{{.successMessage}}</p>
+{{end}}
+
+<form method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" />
+
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" />
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" />
+
+    <label for="passwordConfirm">Confirm Password</label>
+    <input type="password" name="passwordConfirm" id="password" />
+
+    <button type="submit">Signup</button>
+</form>
+
+<p>Already have an account? You can <a href="login">login</a>.</p>

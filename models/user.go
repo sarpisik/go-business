@@ -6,17 +6,18 @@ import (
 )
 
 type User struct {
-	ID       int    `json: "id"`
-	Name     string `json: "name"`
-	Email    string `json: "email"`
-	Password string `json: "password"`
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 const UserTableCreationQuery = `CREATE TABLE IF NOT EXISTS users
 (
     id SERIAL,
     name TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )`
 
@@ -41,12 +42,25 @@ func GetUsers(db *sql.DB) ([]User, error) {
 	return users, nil
 }
 
-func (u *User) getUser(db *sql.DB) error {
-	return errors.New("Not implemented")
+func (u *User) GetUserByEmail(db *sql.DB) error {
+	q := `
+	SELECT id,email,name,password FROM users
+	WHERE email=$1
+	`
+	return db.QueryRow(q, u.Email).Scan(&u.ID, &u.Email, &u.Name, &u.Password)
 }
 
-func (u *User) createUser(db *sql.DB) error {
-	return errors.New("Not implemented")
+func (u *User) CreateUser(db *sql.DB) error {
+	q := `
+	INSERT INTO users(name, email, password)
+	VALUES($1, $2, $3)
+	`
+	_, err := db.Exec(q, u.Name, u.Email, u.Password)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u *User) updateUser(db *sql.DB) error {
