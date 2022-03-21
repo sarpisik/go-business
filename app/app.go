@@ -46,8 +46,9 @@ func (a *App) Initialize(host, user, password, dbName string, port uint64) {
 func (a *App) initializeRoutes() {
 	routes.SignupRouter(a.Router, a.DB)
 	routes.LoginRouter(a.Router, a.DB)
+	routes.LogoutRouter(a.Router)
 	routes.UsersRouter(a.Router, a.DB)
-	routes.IndexRouter(a.Router)
+	routes.IndexRouter(a.Router, a.DB)
 }
 
 func (a *App) Run(addr string) {

@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/sarpisik/go-business/middlewares"
 	"github.com/sarpisik/go-business/models"
 )
 
@@ -47,7 +48,9 @@ func LoginPost(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, tmplErr.Error(), http.StatusInternalServerError)
 			}
 		} else {
-			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			middlewares.SetAuth(u.ID, func(w http.ResponseWriter, r *http.Request) {
+				http.Redirect(w, r, "/", http.StatusFound)
+			})(w, r)
 		}
 	}
 }

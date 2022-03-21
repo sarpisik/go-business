@@ -8,11 +8,16 @@ import (
 )
 
 func Config(key string) string {
-	err := godotenv.Load(".devcontainer/.env")
+	err := godotenv.Load()
 
 	if err != nil {
-		fmt.Print("Error loading .env file")
+		fmt.Print("Error loading .env file\n")
 	}
 
-	return os.Getenv(key)
+	v := os.Getenv(key)
+	if v == "" {
+		fmt.Printf("Env variable \"%s\" not defined.\n", key)
+	}
+
+	return v
 }

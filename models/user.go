@@ -50,6 +50,14 @@ func (u *User) GetUserByEmail(db *sql.DB) error {
 	return db.QueryRow(q, u.Email).Scan(&u.ID, &u.Email, &u.Name, &u.Password)
 }
 
+func (u *User) GetUserByID(db *sql.DB) error {
+	q := `
+	SELECT id,email,name FROM users
+	WHERE id=$1
+	`
+	return db.QueryRow(q, u.ID).Scan(&u.ID, &u.Email, &u.Name)
+}
+
 func (u *User) CreateUser(db *sql.DB) error {
 	q := `
 	INSERT INTO users(name, email, password)

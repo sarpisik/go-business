@@ -5,5 +5,5 @@ import (
 )
 
 func LogoutGet(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
