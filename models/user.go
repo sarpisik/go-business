@@ -75,6 +75,22 @@ func (u *User) updateUser(db *sql.DB) error {
 	return errors.New("Not implemented")
 }
 
-func (u *User) deleteUser(db *sql.DB) error {
-	return errors.New("Not implemented")
+func (u *User) DeleteUserByID(db *sql.DB) error {
+	q := `
+	DELETE FROM users
+	WHERE id=$1
+	`
+	result, err := db.Exec(q, u.ID)
+	if err != nil {
+		return err
+	}
+
+	deletedRowsCount, err := result.RowsAffected()
+	if err != nil {
+		return err
+	} else if deletedRowsCount < 1 {
+		return errors.New("failed to delete user")
+	}
+
+	return nil
 }

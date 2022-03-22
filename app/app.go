@@ -47,6 +47,7 @@ func (a *App) initializeRoutes() {
 	routes.SignupRouter(a.Router, a.DB)
 	routes.LoginRouter(a.Router, a.DB)
 	routes.LogoutRouter(a.Router)
+	routes.DeleteAccountRouter(a.Router, a.DB)
 	routes.UsersRouter(a.Router, a.DB)
 	routes.IndexRouter(a.Router, a.DB)
 }

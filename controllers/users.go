@@ -17,3 +17,18 @@ func GetUsers(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 		respondWithJSON(w, http.StatusOK, users)
 	}
 }
+
+func DeleteUserByID(DB *sql.DB, next func(next http.HandlerFunc) http.HandlerFunc) func(u *models.User) http.HandlerFunc {
+	return func(u *models.User) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			err := u.DeleteUserByID(DB)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			} else {
+				next(func(w http.ResponseWriter, r *http.Request) {
+					http.Redirect(w, r, "/", http.StatusFound)
+				}).ServeHTTP(w, r)
+			}
+		}
+	}
+}
