@@ -7,6 +7,7 @@ import (
 
 	"github.com/sarpisik/go-business/middlewares"
 	"github.com/sarpisik/go-business/models"
+	"github.com/sarpisik/go-business/utils/auth"
 )
 
 func LoginGet() func(w http.ResponseWriter, r *http.Request) {
@@ -48,9 +49,19 @@ func LoginPost(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, tmplErr.Error(), http.StatusInternalServerError)
 			}
 		} else {
-			middlewares.SetAuth(u.ID, func(w http.ResponseWriter, r *http.Request) {
-				http.Redirect(w, r, "/", http.StatusFound)
-			})(w, r)
+			isValidPassword := auth.CompareHashAndPassword(u.Password, r.FormValue("password"))
+			if isValidPassword {
+				middlewares.SetAuth(u.ID, func(w http.ResponseWriter, r *http.Request) {
+					http.Redirect(w, r, "/", http.StatusFound)
+				})(w, r)
+			} else {
+				tD["errorType"] = "invalidPass"
+				tD["message"] = "Email or password is wrong."
+				tmplErr := tmpl.Execute(w, tD)
+				if tmplErr != nil {
+					http.Error(w, tmplErr.Error(), http.StatusInternalServerError)
+				}
+			}
 		}
 	}
 }
