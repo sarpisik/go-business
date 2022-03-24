@@ -10,19 +10,18 @@ import (
 	"github.com/sarpisik/go-business/validators"
 )
 
-func ValidateSignupFormData(next http.HandlerFunc) http.HandlerFunc {
-	tmpl, _ := template.ParseFiles("views/signup.html")
+func ValidateLoginFormData(next http.HandlerFunc) http.HandlerFunc {
+	tmpl, _ := template.ParseFiles("views/login.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 
-		u := &models.User{Email: r.FormValue("email"), Password: r.FormValue("password")}
-		sU := &validators.SignUpUser{User: *u, ConfirmPassword: r.FormValue("confirmPassword")}
-		isErr, err := validators.SignupValidator(sU)
+		u := &models.User{Email: r.PostFormValue("email"), Password: r.PostFormValue("password")}
+		isErr, err := validators.LoginValidator(u)
 
 		if isErr {
-			tD := map[string]interface{}{
-				"title": "Signup Page",
+			tD := map[string]string{
+				"title": "Login Page",
 			}
 
 			if err != nil {
@@ -40,8 +39,6 @@ func ValidateSignupFormData(next http.HandlerFunc) http.HandlerFunc {
 						default:
 							errMsg = "Invalid password."
 						}
-					case "confirmPassword":
-						errMsg = "Passwords not match."
 					default:
 						errMsg = "Invalid email."
 					}
@@ -49,7 +46,7 @@ func ValidateSignupFormData(next http.HandlerFunc) http.HandlerFunc {
 					tD[lowerCasedFieldName] = errMsg
 				}
 			} else {
-				tD["otherInputError"] = "Something went wrong."
+				tD["otherFormError"] = "Something went wrong."
 			}
 
 			tmplErr := tmpl.Execute(w, tD)
@@ -57,8 +54,9 @@ func ValidateSignupFormData(next http.HandlerFunc) http.HandlerFunc {
 				http.Error(w, tmplErr.Error(), http.StatusInternalServerError)
 			}
 		} else {
-			ctx := context.WithValue(r.Context(), "userFormData", u)
+			ctx := context.WithValue(r.Context(), "formData", u)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		}
 	}
+
 }

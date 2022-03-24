@@ -10,6 +10,6 @@ type SignUpUser struct {
 	ConfirmPassword string `validate:"required,eqfield=Password"`
 }
 
-func UserValidator(u *SignUpUser) (bool, validator.ValidationErrors) {
+func SignupValidator(u *SignUpUser) (bool, validator.ValidationErrors) {
 	return structValidator(Validate.Struct(u))
 }

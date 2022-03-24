@@ -24,16 +24,16 @@ func LoginGet() func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func LoginPost(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+func LoginPost(DB *sql.DB) http.HandlerFunc {
 	tmpl, _ := template.ParseFiles("views/login.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tD := map[string]interface{}{
 			"title": "Login Page",
 		}
-		r.ParseForm()
 
-		u := models.User{Email: r.FormValue("email")}
+		u := r.Context().Value("formData").(*models.User)
+
 		if err := u.GetUserByEmail(DB); err != nil {
 			switch err {
 			case sql.ErrNoRows:
@@ -49,7 +49,8 @@ func LoginPost(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, tmplErr.Error(), http.StatusInternalServerError)
 			}
 		} else {
-			isValidPassword := auth.CompareHashAndPassword(u.Password, r.FormValue("password"))
+			isValidPassword := auth.CompareHashAndPassword(u.Password, r.PostFormValue("password"))
+
 			if isValidPassword {
 				middlewares.SetAuth(u.ID, func(w http.ResponseWriter, r *http.Request) {
 					http.Redirect(w, r, "/", http.StatusFound)
@@ -57,6 +58,7 @@ func LoginPost(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 			} else {
 				tD["errorType"] = "invalidPass"
 				tD["message"] = "Email or password is wrong."
+
 				tmplErr := tmpl.Execute(w, tD)
 				if tmplErr != nil {
 					http.Error(w, tmplErr.Error(), http.StatusInternalServerError)

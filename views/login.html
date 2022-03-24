@@ -6,9 +6,15 @@
 <form method="post">
     <label for="email">Email</label>
     <input type="email" name="email" id="email" />
+    {{if .email}}
+      <p>{{.email}}</p>
+    {{end}}
 
     <label for="password">Password</label>
     <input type="password" name="password" id="password" />
+    {{if .password}}
+      <p>{{.password}}</p>
+    {{end}}
 
     <button type="submit">Login</button>
 </form>
