@@ -8,18 +8,30 @@
   <p>{{.successMessage}}</p>
 {{end}}
 
+{{if .otherInputError}}
+  <p>{{.otherInputError}}</p>
+{{end}}
+
 <form method="post">
     <label for="name">Name</label>
     <input type="text" name="name" id="name" />
 
     <label for="email">Email</label>
     <input type="email" name="email" id="email" />
-
+    {{if .email}}
+      <p>{{.email}}</p>
+    {{end}}
     <label for="password">Password</label>
     <input type="password" name="password" id="password" />
-
-    <label for="passwordConfirm">Confirm Password</label>
-    <input type="password" name="passwordConfirm" id="password" />
+    {{if .password}}
+      <p>{{.password}}</p>
+    {{end}}
+    
+    <label for="confirmPassword">Confirm Password</label>
+    <input type="password" name="confirmPassword" id="password" />
+    {{if .confirmPassword}}
+      <p>{{.confirmPassword}}</p>
+    {{end}}
 
     <button type="submit">Signup</button>
 </form>

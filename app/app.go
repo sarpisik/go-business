@@ -11,6 +11,7 @@ import (
 
 	"github.com/sarpisik/go-business/models"
 	"github.com/sarpisik/go-business/routes"
+	"github.com/sarpisik/go-business/validators"
 )
 
 type App struct {
@@ -37,6 +38,9 @@ func (a *App) Initialize(host, user, password, dbName string, port uint64) {
 	if _, err := a.DB.Exec(models.UserTableCreationQuery); err != nil {
 		log.Fatal(err)
 	}
+
+	// init validator
+	validators.New()
 
 	a.Router = mux.NewRouter()
 
