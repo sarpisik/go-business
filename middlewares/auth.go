@@ -10,6 +10,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/gorilla/mux"
 	"github.com/sarpisik/go-business/config"
+	"github.com/sarpisik/go-business/constants"
 	"github.com/sarpisik/go-business/models"
 )
 
@@ -48,7 +49,7 @@ func ParseJWT(next http.HandlerFunc) http.HandlerFunc {
 			}
 
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-				ctx := context.WithValue(r.Context(), "userID", claims["userID"])
+				ctx := context.WithValue(r.Context(), constants.UserID, claims["userID"])
 
 				next.ServeHTTP(w, r.WithContext(ctx))
 			} else {
@@ -78,19 +79,22 @@ func GetCookie(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func GetUserData(DB *sql.DB, next func(u *models.User) http.HandlerFunc) http.HandlerFunc {
+func GetUserData(DB *sql.DB, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if userID := r.Context().Value("userID"); userID != nil {
-			u := models.User{ID: int(userID.(float64))}
+		u := &models.User{}
+
+		if userID := r.Context().Value(constants.UserID); userID != nil {
+			u.ID = int(userID.(float64))
+
 			if err := u.GetUserByID(DB); err != nil {
 				fmt.Printf("User not found by ID: %v\n", userID)
 			}
 
-			next(&u).ServeHTTP(w, r)
-
-		} else {
-			next(&models.User{}).ServeHTTP(w, r)
 		}
+
+		ctx := context.WithValue(r.Context(), constants.SessionUser, u)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }
 

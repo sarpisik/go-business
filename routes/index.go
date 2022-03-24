@@ -10,5 +10,5 @@ import (
 )
 
 func IndexRouter(router *mux.Router, DB *sql.DB) {
-	router.HandleFunc("/", middlewares.GetCookie(middlewares.ParseJWT(middlewares.GetUserData(DB, controllers.Index)))).Methods("GET")
+	router.HandleFunc("/", middlewares.GetCookie(middlewares.ParseJWT(middlewares.GetUserData(DB, controllers.Index())))).Methods("GET")
 }
