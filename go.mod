@@ -3,6 +3,7 @@ module github.com/sarpisik/go-business
 go 1.16
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/gorilla/mux v1.8.0

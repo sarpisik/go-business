@@ -25,7 +25,7 @@ func LoginGet() func(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginPost(DB *sql.DB) http.HandlerFunc {
-	tmpl, _ := template.ParseFiles("views/login.html")
+	tmpl, _ := template.ParseFiles("/workspace/views/login.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tD := map[string]interface{}{

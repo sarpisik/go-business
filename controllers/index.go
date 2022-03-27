@@ -9,7 +9,7 @@ import (
 )
 
 func Index() http.HandlerFunc {
-	tmpl, _ := template.ParseFiles("views/index.html")
+	tmpl, _ := template.ParseFiles("/workspace/views/index.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		if tmpl == nil {

@@ -25,7 +25,7 @@ func SignupGet() func(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignupPost(DB *sql.DB) func(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("views/signup.html")
+	tmpl, _ := template.ParseFiles("/workspace/views/signup.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tD := map[string]interface{}{

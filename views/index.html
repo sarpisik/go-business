@@ -7,12 +7,12 @@
     </head>
     <body>
         {{if .userName}}
-          <a href="/logout">Logout</a>
+          <a href="/logout" data-testid="logout-button">Logout</a>
           <br />
           <a href="/delete-account">Delete Account</a>
           <h1>{{.userName}}</h1>
         {{else}}
-          <a href="/login">Login</a>
+          <a href="/login" data-testid="login-button">Login</a>
         {{end}}
     </body>
 </html>

@@ -8,7 +8,7 @@ import (
 )
 
 func Config(key string) string {
-	err := godotenv.Load()
+	err := godotenv.Load("/workspace/.env")
 
 	if err != nil {
 		fmt.Print("Error loading .env file\n")
