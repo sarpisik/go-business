@@ -61,7 +61,7 @@ func GetDocFromRes(t *testing.T, res *httptest.ResponseRecorder) *goquery.Docume
 	return doc
 }
 
-func Signup(t *testing.T, a *app.App, data *url.Values) {
+func Signup(t *testing.T, a *app.App, data *url.Values) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(http.MethodPost, "/signup", strings.NewReader(data.Encode()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
@@ -74,4 +74,6 @@ func Signup(t *testing.T, a *app.App, data *url.Values) {
 	if el := GetByTestID(t, "signup-success-msg", res); el.Length() == 0 {
 		t.Fatal("Success signup message not rendered.")
 	}
+
+	return res
 }

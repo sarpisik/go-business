@@ -1,7 +1,7 @@
 <title>{{.title}}</title>
 
 {{if .errorType}}
-  <p>{{.message}}</p>
+<p data-testid="other-error-msg">{{.message}}</p>
 {{end}}
 
 {{if .successMessage}}
@@ -19,21 +19,22 @@
     <label for="email">Email</label>
     <input type="email" name="email" id="email" />
     {{if .email}}
-      <p>{{.email}}</p>
+      <p data-testid="email-error-msg">{{.email}}</p>
     {{end}}
+
     <label for="password">Password</label>
     <input type="password" name="password" id="password" />
     {{if .password}}
-      <p>{{.password}}</p>
+      <p data-testid="password-error-msg">{{.password}}</p>
     {{end}}
     
     <label for="confirmPassword">Confirm Password</label>
     <input type="password" name="confirmPassword" id="password" />
     {{if .confirmPassword}}
-      <p>{{.confirmPassword}}</p>
+      <p data-testid="confirm-password-error-msg">{{.confirmPassword}}</p>
     {{end}}
 
-    <button type="submit">Signup</button>
+    <button type="submit" data-testid="signup-submit-btn">Signup</button>
 </form>
 
 <p>Already have an account? You can <a href="login">login</a>.</p>

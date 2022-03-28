@@ -11,7 +11,7 @@ import (
 )
 
 func ValidateSignupFormData(next http.HandlerFunc) http.HandlerFunc {
-	tmpl, _ := template.ParseFiles("views/signup.html")
+	tmpl, _ := template.ParseFiles("/workspace/views/signup.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
