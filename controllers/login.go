@@ -11,7 +11,7 @@ import (
 )
 
 func LoginGet() func(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("views/login.html")
+	tmpl, _ := template.ParseFiles("/workspace/views/login.html")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmplData := map[string]interface{}{

@@ -31,29 +31,18 @@ func TestIndexAuth(t *testing.T) {
 	data.Set("email", "user@test.com")
 	data.Set("password", "123456")
 	data.Set("confirmPassword", "123456")
-	req, _ := http.NewRequest(http.MethodPost, "/signup", strings.NewReader(data.Encode()))
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
-	res := test_helpers.ExecuteRequest(&a, req)
-
-	expected := http.StatusOK
-	received := res.Code
-	test_helpers.CheckResponseCode(t, expected, received)
-
-	if el := test_helpers.GetByTestID(t, "signup-success-msg", res); el.Length() == 0 {
-		t.Fatal("Success signup message not rendered.")
-	}
+	test_helpers.Signup(t, &a, &data)
 
 	// Login
 	data.Del("name")
 	data.Del("confirmPassword")
-	req, _ = http.NewRequest(http.MethodPost, "/login", strings.NewReader(data.Encode()))
+	req, _ := http.NewRequest(http.MethodPost, "/login", strings.NewReader(data.Encode()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
-	res = test_helpers.ExecuteRequest(&a, req)
+	res := test_helpers.ExecuteRequest(&a, req)
 
-	expected = http.StatusFound
-	received = res.Code
+	expected := http.StatusFound
+	received := res.Code
 	test_helpers.CheckResponseCode(t, expected, received)
 
 	var cookieValue string
